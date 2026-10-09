@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #161616; --orange: #FF4E00; --panel: #F2F2F2; --paper: #FCFCFC;
+    --g1: #484848; --g2: #7A7A7A; --rule: #DADADA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper);
+    font-family: Arial, "Liberation Sans", sans-serif; color: var(--ink); }
+  .scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  .abs { position: absolute; }
+  .hd { position: absolute; left: 120px; top: 110px; font-size: 64px; font-weight: 700; letter-spacing: -1px; }
+  .hd span { color: var(--orange); }
+  .rule { position: absolute; left: 120px; top: 205px; height: 2px; background: var(--rule); width: 1680px; transform-origin: left; transform: scaleX(0); }
+  .sub { position: absolute; left: 120px; top: 228px; font-size: 30px; color: var(--g2); }
+  .eyebrow { font-size: 32px; font-weight: 700; color: var(--orange); letter-spacing: 1px; }
+  .band { position: absolute; left: 0; bottom: 0; width: 1920px; height: 150px; overflow: hidden; }
+  .band img.g { width: 1920px; height: 150px; object-fit: cover; display: block; }
+  .band img.logo { position: absolute; left: 120px; top: 52px; height: 46px; }
+  .card { position: absolute; background: var(--panel); border-left: 10px solid var(--orange); }
+
+  /* I1 problem */
+  #i1 .eyebrow { left: 120px; top: 230px; }
+  #i1 .stmt { left: 112px; top: 290px; width: 1640px; font-size: 92px; font-weight: 700; letter-spacing: -2px; line-height: 1.12; }
+  #i1 .stmt span { color: var(--orange); }
+
+  /* I2 no leading indicators */
+  #i2 .blk { left: 120px; top: 290px; width: 1680px; height: 260px; background: var(--ink); color: #fff; padding: 0 70px;
+    display: flex; flex-direction: column; justify-content: center; font-size: 72px; font-weight: 700; letter-spacing: -1px; line-height: 1.15; }
+  #i2 .blk span { color: var(--orange); }
+  #i2 .line { left: 120px; top: 760px; width: 1680px; height: 4px; background: var(--rule); transform-origin: left; }
+  .dot { position: absolute; top: 742px; width: 40px; height: 40px; border-radius: 50%; }
+  .dl { position: absolute; top: 810px; width: 460px; font-size: 34px; font-weight: 700; text-align: center; }
+  .dl small { display: block; font-size: 28px; font-weight: 400; color: var(--g2); margin-top: 8px; }
+
+  /* I3 opportunity */
+  .pr { top: 300px; width: 540px; height: 470px; background: var(--panel); }
+  .pr .h { height: 110px; background: var(--ink); color: var(--orange); font-size: 60px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .pr .k { font-size: 50px; font-weight: 700; margin: 44px 44px 0; line-height: 1.15; }
+  .pr .d { font-size: 36px; color: var(--g1); margin: 26px 44px 0; line-height: 1.35; }
+
+  /* I4 platform */
+  .pf { top: 320px; width: 820px; height: 470px; padding: 50px 54px; }
+  .pf .eyebrow { font-size: 28px; }
+  .pf .k { font-size: 56px; font-weight: 700; margin-top: 26px; line-height: 1.15; letter-spacing: -1px; }
+  .pf .d { font-size: 36px; color: var(--g1); margin-top: 30px; line-height: 1.4; }
+  #i4 .foot { left: 120px; top: 860px; font-size: 40px; font-weight: 700; }
+  #i4 .foot span { color: var(--orange); }
+
+  /* I5 detects */
+  .dt { width: 540px; height: 230px; padding: 40px 44px; }
+  .dt .i { font-size: 30px; font-weight: 700; color: var(--orange); }
+  .dt .k { font-size: 50px; font-weight: 700; margin-top: 22px; line-height: 1.15; letter-spacing: -1px; }
+
+  /* I6 privacy & security */
+  .ps { width: 820px; height: 170px; padding: 0 44px; display: flex; align-items: center; gap: 30px; }
+  .ps b { color: var(--orange); font-size: 54px; }
+  .ps .k { font-size: 42px; font-weight: 700; }
+  .ps .d { font-size: 30px; color: var(--g1); margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<!-- I1 the problem -->
+<div class="scene" id="i1">
+  <div class="abs eyebrow" id="i1e">PURPOSE &amp; SCOPE &nbsp;|&nbsp; THE PROBLEM</div>
+  <div class="abs stmt" id="i1s">Road travel is the <span>largest source of serious injury risk</span> for our field-based workforce.</div>
+  <div class="band" id="i1band"><img class="g" src="gradient.jpeg"><img class="logo" src="novartis.svg"></div>
+</div>
+
+<!-- I2 no leading indicators -->
+<div class="scene" id="i2">
+  <div class="hd" id="i2h">Today, we have no leading indicators.</div>
+  <div class="rule" id="i2r"></div>
+  <div class="abs blk" id="i2b"><div>We learn of unsafe driving</div><div><span>only after an incident.</span></div></div>
+  <div class="abs line" id="i2l"></div>
+  <div class="dot" id="o1" style="left:370px;background:var(--rule)"></div>
+  <div class="dot" id="o2" style="left:940px;background:var(--orange)"></div>
+  <div class="dot" id="o3" style="left:1510px;background:var(--ink)"></div>
+  <div class="dl" id="l1" style="left:160px">Unsafe driving<small>goes unseen</small></div>
+  <div class="dl" id="l2" style="left:730px">An incident<small>happens</small></div>
+  <div class="dl" id="l3" style="left:1300px">We find out<small>too late to prevent it</small></div>
+</div>
+
+<!-- I3 opportunity -->
+<div class="scene" id="i3">
+  <div class="hd" id="i3h">The opportunity: from reactive to <span>preventive.</span></div>
+  <div class="rule" id="i3r"></div>
+  <div class="abs pr" id="p1" style="left:120px"><div class="h">01</div><div class="k">See the risk</div><div class="d">Overspeeding, harsh braking and phone use, made visible.</div></div>
+  <div class="abs pr" id="p2" style="left:690px"><div class="h">02</div><div class="k">Coach the right people</div><div class="d">Targeted coaching for those who need it.</div></div>
+  <div class="abs pr" id="p3" style="left:1260px"><div class="h">03</div><div class="k">Reduce incidents</div><div class="d">Measurably fewer road incidents.</div></div>
+</div>
+
+<!-- I4 platform -->
+<div class="scene" id="i4">
+  <div class="hd" id="i4h">The platform: SafetyConnect.</div>
+  <div class="rule" id="i4r"></div>
+  <div class="sub" id="i4s">AI-powered driving safety, delivered as a cloud-hosted SaaS platform</div>
+  <div class="card pf" id="f1" style="left:120px"><div class="eyebrow">MOBILE APP &nbsp;·&nbsp; ANDROID &amp; iOS</div><div class="k">Uses the smartphone's built-in sensors.</div><div class="d">Trips are detected and analysed automatically.</div></div>
+  <div class="card pf" id="f2" style="left:980px;border-left-color:var(--g1)"><div class="eyebrow" style="color:var(--g1)">WEB DASHBOARD</div><div class="k">Built for the HSE team.</div><div class="d">Scores, risk trends and reports in one place.</div></div>
+  <div class="abs foot" id="i4f">No vehicle hardware. <span>No dashcam.</span></div>
+</div>
+
+<!-- I5 detects -->
+<div class="scene" id="i5">
+  <div class="hd" id="i5h">What it detects, on every trip.</div>
+  <div class="rule" id="i5r"></div>
+  <div class="card dt" id="t1" style="left:120px;top:300px"><div class="i">01</div><div class="k">Harsh acceleration</div></div>
+  <div class="card dt" id="t2" style="left:690px;top:300px"><div class="i">02</div><div class="k">Harsh braking</div></div>
+  <div class="card dt" id="t3" style="left:1260px;top:300px"><div class="i">03</div><div class="k">Harsh cornering</div></div>
+  <div class="card dt" id="t4" style="left:120px;top:570px"><div class="i">04</div><div class="k">Overspeeding</div></div>
+  <div class="card dt" id="t5" style="left:690px;top:570px"><div class="i">05</div><div class="k">Phone use while driving</div></div>
+  <div class="card dt" id="t6" style="left:1260px;top:570px"><div class="i">06</div><div class="k">Collision detection</div></div>
+</div>
+
+<!-- I6 privacy, security, IT -->
+<div class="scene" id="i6">
+  <div class="hd" id="i6h">Privacy, security and IT: <span>built in.</span></div>
+  <div class="rule" id="i6r"></div>
+  <div class="card ps" id="s1" style="left:120px;top:290px"><b>✓</b><div><div class="k">Privacy in the user's control</div><div class="d">Only business-mode trips are analysed.</div></div></div>
+  <div class="card ps" id="s2" style="left:980px;top:290px"><b>✓</b><div><div class="k">Onboarding from a user list</div><div class="d">Login by OTP.</div></div></div>
+  <div class="card ps" id="s3" style="left:120px;top:500px"><b>✓</b><div><div class="k">No system integration</div><div class="d">No SSO or Active Directory needed.</div></div></div>
+  <div class="card ps" id="s4" style="left:980px;top:500px"><b>✓</b><div><div class="k">Encrypted</div><div class="d">In transit and at rest.</div></div></div>
+  <div class="card ps" id="s5" style="left:120px;top:710px"><b>✓</b><div><div class="k">Role-based access</div><div class="d">Cloud hosted.</div></div></div>
+  <div class="card ps" id="s6" style="left:980px;top:710px"><b>✓</b><div><div class="k">ISO 27001 certified vendor</div></div></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const prog = (t, t0, d) => cl((t - t0) / d);
+
+function appear(el, t, t0, d = 0.5, dy = 28) {
+  const p = ease(prog(t, t0, d));
+  el.style.opacity = p;
+  el.style.transform = `translateY(${(1 - p) * dy}px)`;
+  return p;
+}
+function scene(el, t, a, b, out = 0.35) {
+  if (t < a || t >= b) { el.style.opacity = 0; el.style.visibility = 'hidden'; return false; }
+  el.style.visibility = 'visible';
+  const o = cl((b - t) / out);
+  el.style.opacity = o;
+  el.style.transform = `translateY(${(1 - o) * -14}px)`;
+  return true;
+}
+function header(t, a, n) {
+  appear($(`i${n}h`), t, a + 0.1);
+  $(`i${n}r`).style.transform = `scaleX(${inOut(prog(t, a + 0.15, 0.7))})`;
+  const s = $(`i${n}s`); if (s && n !== 1) appear(s, t, a + 0.3);
+}
+const wipe = (el, t, t0, d) => el.style.clipPath = `inset(0 ${100 - 100 * inOut(prog(t, t0, d))}% 0 0)`;
+
+const S = [0, 5.5, 12, 19, 25.5, 31, 42];
+window.DURATION = S[6];
+
+window.render = function (t) {
+  if (scene($('i1'), t, S[0], S[1])) {
+    wipe($('i1band'), t, 0.1, 0.9);
+    appear($('i1e'), t, 0.2);
+    appear($('i1s'), t, 0.4, 0.7, 36);
+  }
+  if (scene($('i2'), t, S[1], S[2])) {
+    const a = S[1];
+    header(t, a, 2);
+    appear($('i2b'), t, a + 0.4, 0.55, 30);
+    $('i2l').style.transform = `scaleX(${inOut(prog(t, a + 1.3, 1.2))})`;
+    ['o1', 'o2', 'o3'].forEach((id, i) => {
+      const p = ease(prog(t, a + 1.5 + i * 0.4, 0.35));
+      $(id).style.opacity = p; $(id).style.transform = `scale(${0.4 + 0.6 * p})`;
+      appear($('l' + (i + 1)), t, a + 1.6 + i * 0.4, 0.45, 16);
+    });
+  }
+  if (scene($('i3'), t, S[2], S[3])) {
+    const a = S[2];
+    header(t, a, 3);
+    ['p1', 'p2', 'p3'].forEach((id, i) => appear($(id), t, a + 0.5 + i * 0.8, 0.55, 30));
+  }
+  if (scene($('i4'), t, S[3], S[4])) {
+    const a = S[3];
+    header(t, a, 4);
+    appear($('f1'), t, a + 0.5, 0.55, 30);
+    appear($('f2'), t, a + 1.2, 0.55, 30);
+    appear($('i4f'), t, a + 2.2, 0.5, 20);
+  }
+  if (scene($('i5'), t, S[4], S[5])) {
+    const a = S[4];
+    header(t, a, 5);
+    ['t1', 't2', 't3', 't4', 't5', 't6'].forEach((id, i) => appear($(id), t, a + 0.45 + i * 0.22, 0.45, 24));
+  }
+  if (scene($('i6'), t, S[5], S[6], 0.4)) {
+    const a = S[5];
+    header(t, a, 6);
+    ['s1', 's2', 's3', 's4', 's5', 's6'].forEach((id, i) => appear($(id), t, a + 0.5 + i * 0.6, 0.5, 24));
+  }
+};
+window.render(0);
+</script>
+</body>
+</html>

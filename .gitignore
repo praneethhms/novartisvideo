@@ -4,3 +4,7 @@ brag-output*/work/src/
 brag-output*/work/*.wav
 brag-output*/work/frame0-orig.jpg
 brag-output*/work/clip/
+brag-output*/work/frames-*/
+brag-output*/work/stills-*/
+brag-output*/work/main-frames/
+brag-output*/work/intro-frame0-orig.jpg
