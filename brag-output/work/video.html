@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #161616; --orange: #FF4E00; --panel: #F2F2F2; --paper: #FCFCFC;
+    --g1: #484848; --g2: #7A7A7A; --rule: #DADADA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper);
+    font-family: Arial, "Liberation Sans", sans-serif; color: var(--ink); }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .abs { position: absolute; }
+  .num { font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+  h1.hd { position: absolute; left: 120px; top: 110px; font-size: 64px; font-weight: 700; letter-spacing: -1px; }
+  .rule { position: absolute; left: 120px; top: 205px; height: 2px; background: var(--rule); width: 1680px; transform-origin: left; }
+  .sub { position: absolute; left: 120px; top: 228px; font-size: 28px; color: var(--g2); }
+
+  /* S1 */
+  #s1 { background: var(--ink); }
+  #s1 .big { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 280px; color: var(--orange); }
+  #s1 .l1 { position: absolute; left: 0; right: 0; top: 590px; text-align: center; font-size: 64px; font-weight: 700; color: #fff; }
+  #s1 .l2 { position: absolute; left: 0; right: 0; top: 690px; text-align: center; font-size: 46px; color: #A8A8A8; }
+
+  /* S2 */
+  #s2 .band { position: absolute; left: 0; bottom: 0; width: 1920px; height: 150px; overflow: hidden; }
+  #s2 .band img.g { width: 1920px; height: 150px; object-fit: cover; display: block; }
+  #s2 .band img.logo { position: absolute; left: 120px; top: 52px; height: 46px; }
+  #s2 .eyebrow { left: 120px; top: 250px; font-size: 32px; font-weight: 700; color: var(--orange); letter-spacing: 1px; }
+  #s2 .title { left: 112px; top: 300px; font-size: 136px; font-weight: 700; letter-spacing: -3px; }
+  #s2 .tag { left: 120px; top: 490px; font-size: 56px; color: var(--g1); }
+  #s2 .chip { top: 640px; height: 92px; padding: 0 40px 0 30px; background: var(--panel); border-left: 8px solid var(--orange);
+    font-size: 38px; font-weight: 700; display: flex; align-items: center; gap: 18px; }
+  #s2 .chip b { color: var(--orange); }
+
+  /* S3 */
+  .card { position: absolute; background: var(--panel); border-left: 10px solid var(--orange); padding: 44px 40px; }
+  .card.ink { border-left-color: var(--g1); }
+  .card .n { font-size: 116px; color: var(--orange); line-height: 1; }
+  .card.ink .n { color: var(--g1); }
+  .card .lbl { font-size: 32px; color: var(--g2); margin-top: 36px; }
+  #s3 .foot { left: 120px; top: 780px; font-size: 40px; font-weight: 700; }
+  #s3 .foot span { color: var(--orange); }
+
+  /* S4 */
+  #s4 .panel { left: 120px; top: 300px; width: 520px; height: 640px; background: var(--panel); border-left: 10px solid var(--orange); padding: 60px 48px; }
+  #s4 .panel .n { font-size: 150px; color: var(--orange); line-height: 1; }
+  #s4 .panel .lbl { font-size: 36px; color: var(--g1); margin-top: 26px; line-height: 1.3; }
+  #s4 .panel .meta { font-size: 28px; color: var(--g2); margin-top: 60px; line-height: 1.6; }
+  .bar { position: absolute; left: 720px; width: 1080px; }
+  .bar .top { display: flex; justify-content: space-between; font-size: 36px; font-weight: 700; }
+  .bar .top .v { color: var(--g1); font-weight: 400; }
+  .bar .track { margin-top: 16px; height: 26px; background: var(--rule); }
+  .bar .fill { height: 100%; width: 0; }
+  #s4 .call { left: 720px; top: 800px; display: flex; align-items: center; gap: 36px; }
+  #s4 .call .n { font-size: 136px; color: var(--orange); line-height: 1; }
+  #s4 .call .t { font-size: 42px; font-weight: 700; line-height: 1.25; }
+
+  /* S5 */
+  .band5 { position: absolute; left: 120px; width: 940px; }
+  .band5 .top { display: flex; justify-content: space-between; font-size: 34px; font-weight: 700; }
+  .band5 .top .v { font-weight: 400; color: var(--g1); }
+  .band5 .track { margin-top: 16px; height: 44px; background: var(--rule); }
+  .band5 .fill { height: 100%; width: 0; }
+  #s5 .dh { left: 1200px; top: 300px; font-size: 32px; font-weight: 700; color: var(--g1); }
+  .div { position: absolute; left: 1200px; width: 600px; height: 170px; background: var(--panel); border-left: 10px solid var(--orange);
+    display: flex; justify-content: space-between; align-items: center; padding: 0 44px; }
+  .div .k { font-size: 40px; font-weight: 700; }
+  .div .n { font-size: 100px; color: var(--orange); }
+
+  /* S6 */
+  #s6 .step { position: absolute; top: 230px; width: 360px; height: 190px; background: var(--ink); color: #fff; padding: 34px 32px; }
+  #s6 .step .k { font-size: 44px; font-weight: 700; }
+  #s6 .step .d { font-size: 26px; color: #BDBDBD; margin-top: 16px; line-height: 1.3; }
+  #s6 .arr { position: absolute; top: 290px; font-size: 54px; color: var(--orange); font-weight: 700; }
+  #s6 .line { left: 0; right: 0; top: 540px; text-align: center; font-size: 104px; font-weight: 700; letter-spacing: -2px; }
+  #s6 .pw { left: 0; right: 0; top: 690px; text-align: center; font-size: 36px; color: var(--g2); }
+  #s6 .band { position: absolute; left: 0; bottom: 0; width: 1920px; height: 150px; overflow: hidden; }
+  #s6 .band img.g { width: 1920px; height: 150px; object-fit: cover; display: block; }
+  #s6 .band img.logo { position: absolute; left: 120px; top: 52px; height: 46px; }
+</style>
+</head>
+<body>
+
+<!-- S1 hook -->
+<div class="scene" id="s1">
+  <div class="big num" id="s1n">0</div>
+  <div class="l1" id="s1a">at-risk driving moments</div>
+  <div class="l2" id="s1b">Flagged before any incident.</div>
+</div>
+
+<!-- S2 reveal -->
+<div class="scene" id="s2">
+  <div class="abs eyebrow" id="s2e">TELEMATICS PILOT &nbsp;|&nbsp; 10 APRIL TO 15 JUNE 2026</div>
+  <div class="abs title" id="s2t">Driver Safety Programme</div>
+  <div class="abs tag" id="s2g">AI-powered driving safety on a smartphone.</div>
+  <div class="abs chip" id="c1" style="left:120px"><b>✓</b>No hardware</div>
+  <div class="abs chip" id="c2" style="left:520px"><b>✓</b>No camera</div>
+  <div class="abs chip" id="c3" style="left:890px"><b>✓</b>No audio</div>
+  <div class="band" id="s2band"><img class="g" src="gradient.jpeg"><img class="logo" src="novartis.svg"></div>
+</div>
+
+<!-- S3 glance -->
+<div class="scene" id="s3">
+  <h1 class="hd" id="s3h">The pilot at a glance.</h1>
+  <div class="rule" id="s3r"></div>
+  <div class="sub" id="s3s">10 April to 15 June 2026 &nbsp;|&nbsp; Divisions: NHPL, Oncology, IMB</div>
+  <div class="card" id="k1" style="left:120px;top:350px;width:400px;height:320px"><div class="n num" id="k1n">0</div><div class="lbl">Field associates</div></div>
+  <div class="card" id="k2" style="left:546px;top:350px;width:400px;height:320px"><div class="n num" id="k2n">0</div><div class="lbl">Days of monitoring</div></div>
+  <div class="card ink" id="k3" style="left:972px;top:350px;width:400px;height:320px"><div class="n num" id="k3n">0</div><div class="lbl">Kilometres covered</div></div>
+  <div class="card ink" id="k4" style="left:1398px;top:350px;width:400px;height:320px"><div class="n num" id="k4n">0</div><div class="lbl">Trips</div></div>
+  <div class="abs foot" id="s3f">Every trip captured automatically. <span>No manual logging.</span></div>
+</div>
+
+<!-- S4 risk -->
+<div class="scene" id="s4">
+  <h1 class="hd" id="s4h">Where the risk sits.</h1>
+  <div class="rule" id="s4r"></div>
+  <div class="abs panel" id="s4p">
+    <div class="n num" id="s4n">0</div>
+    <div class="lbl">at-risk behaviour events</div>
+    <div class="meta">20 drivers &nbsp;|&nbsp; 11,843 km<br>10 Apr to 15 Jun 2026</div>
+  </div>
+  <div class="bar" id="b1" style="top:310px"><div class="top"><span>Harsh Braking</span><span class="v">4,142 · 53.7%</span></div><div class="track"><div class="fill" style="background:var(--orange)"></div></div></div>
+  <div class="bar" id="b2" style="top:430px"><div class="top"><span>Phone Usage</span><span class="v">1,738 · 22.5%</span></div><div class="track"><div class="fill" style="background:var(--ink)"></div></div></div>
+  <div class="bar" id="b3" style="top:550px"><div class="top"><span>Overspeeding</span><span class="v">1,243 · 16.1%</span></div><div class="track"><div class="fill" style="background:var(--g2)"></div></div></div>
+  <div class="bar" id="b4" style="top:670px"><div class="top"><span>Harsh Accel. / Cornering</span><span class="v">593 · 7.6%</span></div><div class="track"><div class="fill" style="background:#B5B5B5"></div></div></div>
+  <div class="abs call" id="s4c"><div class="n num">76%</div><div class="t">of all risk sits in just<br>two behaviours.</div></div>
+</div>
+
+<!-- S5 scores -->
+<div class="scene" id="s5">
+  <h1 class="hd" id="s5h">19 of 20 drivers score Good.</h1>
+  <div class="rule" id="s5r"></div>
+  <div class="sub" id="s5s">Average safety score: 86.3 / 100</div>
+  <div class="band5" id="d1" style="top:330px"><div class="top"><span>Good &nbsp;≥70</span><span class="v">19 drivers (95%)</span></div><div class="track"><div class="fill" style="background:var(--orange)"></div></div></div>
+  <div class="band5" id="d2" style="top:520px"><div class="top"><span>Medium &nbsp;30–69</span><span class="v">1 driver (5%)</span></div><div class="track"><div class="fill" style="background:var(--g1)"></div></div></div>
+  <div class="band5" id="d3" style="top:710px"><div class="top"><span>Needs Work &nbsp;&lt;30</span><span class="v">0 drivers (0%)</span></div><div class="track"><div class="fill" style="background:var(--g1)"></div></div></div>
+  <div class="abs dh" id="s5dh">Average score by division</div>
+  <div class="div" id="v1" style="top:360px"><span class="k">NHPL</span><span class="n num" id="v1n">0</span></div>
+  <div class="div" id="v2" style="top:560px"><span class="k">IMB</span><span class="n num" id="v2n">0</span></div>
+  <div class="div" id="v3" style="top:760px"><span class="k">Oncology</span><span class="n num" id="v3n">0</span></div>
+</div>
+
+<!-- S6 outro -->
+<div class="scene" id="s6">
+  <div class="step" id="p1" style="left:120px"><div class="k">Detect</div><div class="d">unsafe patterns via phone sensors</div></div>
+  <div class="arr" id="a1" style="left:503px">→</div>
+  <div class="step" id="p2" style="left:560px"><div class="k">Aware</div><div class="d">micro learning after risky events</div></div>
+  <div class="arr" id="a2" style="left:943px">→</div>
+  <div class="step" id="p3" style="left:1000px"><div class="k">Correct</div><div class="d">targeted training and counselling</div></div>
+  <div class="arr" id="a3" style="left:1383px">→</div>
+  <div class="step" id="p4" style="left:1440px"><div class="k">Reinforce</div><div class="d">rewards, recognition, leaderboards</div></div>
+  <div class="abs line" id="s6l">From pilot to programme.</div>
+  <div class="abs pw" id="s6p">Powered by the SafetyConnect app &nbsp;·&nbsp; already running in seven languages</div>
+  <div class="band" id="s6band"><img class="g" src="gradient.jpeg"><img class="logo" src="novartis.svg"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const prog = (t, t0, d) => cl((t - t0) / d);
+const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
+
+function appear(el, t, t0, d = 0.5, dy = 28) {
+  const p = ease(prog(t, t0, d));
+  el.style.opacity = p;
+  el.style.transform = `translateY(${(1 - p) * dy}px)`;
+  return p;
+}
+function count(el, t, t0, d, to, dec = 0) {
+  el.textContent = fmt(to * ease(prog(t, t0, d)), dec);
+}
+// scene visible in [a, b); fades out over its last `out` seconds
+function scene(el, t, a, b, out = 0.35) {
+  if (t < a || t >= b) { el.style.opacity = 0; el.style.visibility = 'hidden'; return false; }
+  el.style.visibility = 'visible';
+  const o = cl((b - t) / out);
+  el.style.opacity = o;
+  el.style.transform = `translateY(${(1 - o) * -14}px)`;
+  return true;
+}
+
+const S = [0, 3.6, 7.6, 11.4, 15.6, 18.8, 22.4];
+window.DURATION = S[6];
+
+window.render = function (t) {
+  // S1 hook
+  if (scene($('s1'), t, S[0], S[1], 0.01)) {
+    $('s1').style.opacity = 1;
+    $('s1').style.transform = `translateY(${-1080 * inOut(prog(t, S[1] - 0.45, 0.45))}px)`;
+    const p = appear($('s1n'), t, 0.1, 0.4, 0);
+    count($('s1n'), t, 0.1, 1.2, 7716);
+    $('s1n').style.transform = `scale(${0.94 + 0.06 * ease(prog(t, 0.1, 1.4))})`;
+    appear($('s1a'), t, 1.15, 0.5);
+    appear($('s1b'), t, 1.7, 0.5);
+  }
+  // S2 reveal
+  if (scene($('s2'), t, S[1], S[2])) {
+    const a = S[1];
+    $('s2band').style.clipPath = `inset(0 ${100 - 100 * inOut(prog(t, a + 0.1, 0.8))}% 0 0)`;
+    appear($('s2e'), t, a + 0.25);
+    appear($('s2t'), t, a + 0.4, 0.6, 36);
+    appear($('s2g'), t, a + 0.85);
+    appear($('c1'), t, a + 1.5, 0.4, 20);
+    appear($('c2'), t, a + 1.7, 0.4, 20);
+    appear($('c3'), t, a + 1.9, 0.4, 20);
+  }
+  // S3 glance
+  if (scene($('s3'), t, S[2], S[3])) {
+    const a = S[2];
+    appear($('s3h'), t, a + 0.1);
+    $('s3r').style.transform = `scaleX(${inOut(prog(t, a + 0.15, 0.7))})`;
+    appear($('s3s'), t, a + 0.3);
+    [['k1', 20], ['k2', 66], ['k3', 11843], ['k4', 1359]].forEach(([id, v], i) => {
+      appear($(id), t, a + 0.45 + i * 0.15, 0.5, 30);
+      count($(id + 'n'), t, a + 0.5 + i * 0.15, 1.1, v);
+    });
+    appear($('s3f'), t, a + 1.5);
+  }
+  // S4 risk
+  if (scene($('s4'), t, S[3], S[4])) {
+    const a = S[3];
+    appear($('s4h'), t, a + 0.1);
+    $('s4r').style.transform = `scaleX(${inOut(prog(t, a + 0.15, 0.7))})`;
+    appear($('s4p'), t, a + 0.3, 0.5, 30);
+    count($('s4n'), t, a + 0.35, 1.0, 7716);
+    const W = [53.7, 22.5, 16.1, 7.6];
+    const dim = ease(prog(t, a + 1.9, 0.5));
+    W.forEach((w, i) => {
+      const el = $('b' + (i + 1));
+      appear(el, t, a + 0.45 + i * 0.12, 0.45, 20);
+      el.querySelector('.fill').style.width = (w * ease(prog(t, a + 0.6 + i * 0.15, 0.9))) + '%';
+      if (i >= 2) el.style.opacity = Math.min(+el.style.opacity, 1 - 0.65 * dim);
+    });
+    appear($('s4c'), t, a + 2.0, 0.5, 24);
+  }
+  // S5 scores
+  if (scene($('s5'), t, S[4], S[5])) {
+    const a = S[4];
+    appear($('s5h'), t, a + 0.1);
+    $('s5r').style.transform = `scaleX(${inOut(prog(t, a + 0.15, 0.7))})`;
+    appear($('s5s'), t, a + 0.3);
+    [95, 5, 0].forEach((w, i) => {
+      const el = $('d' + (i + 1));
+      appear(el, t, a + 0.35 + i * 0.12, 0.45, 20);
+      el.querySelector('.fill').style.width = (w * ease(prog(t, a + 0.5 + i * 0.12, 1.0))) + '%';
+    });
+    appear($('s5dh'), t, a + 0.5);
+    [['v1', 89.4], ['v2', 87.2], ['v3', 82.3]].forEach(([id, v], i) => {
+      appear($(id), t, a + 0.6 + i * 0.14, 0.45, 24);
+      count($(id + 'n'), t, a + 0.65 + i * 0.14, 1.0, v, 1);
+    });
+  }
+  // S6 outro
+  if (scene($('s6'), t, S[5], S[6] + 1, 0.01)) {
+    const a = S[5];
+    $('s6').style.transform = 'none';
+    ['p1', 'p2', 'p3', 'p4'].forEach((id, i) => {
+      const el = $(id);
+      appear(el, t, a + 0.1 + i * 0.3, 0.45, 24);
+      const on = ease(prog(t, a + 0.4 + i * 0.3, 0.3));
+      el.style.boxShadow = `inset 0 -${12 * on}px 0 var(--orange)`;
+    });
+    ['a1', 'a2', 'a3'].forEach((id, i) => appear($(id), t, a + 0.3 + i * 0.3, 0.3, 0));
+    appear($('s6l'), t, a + 1.45, 0.6, 30);
+    appear($('s6p'), t, a + 1.75, 0.5, 20);
+    $('s6band').style.clipPath = `inset(0 ${100 - 100 * inOut(prog(t, a + 1.3, 0.9))}% 0 0)`;
+  }
+};
+window.render(0);
+</script>
+</body>
+</html>
