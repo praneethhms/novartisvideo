@@ -1,4 +1,5 @@
 // Usage: [PAGE=intro] node capture.js stills t1,t2,...   |   [PAGE=intro] node capture.js frames
+// ALPHA=1 writes transparent PNG frames (for overlays).
 // PAGE picks <PAGE>.html (default: video); output goes to stills/ or frames/, suffixed with -<PAGE> when set.
 const { chromium } = require('playwright');
 const path = require('path');
@@ -13,7 +14,9 @@ const fs = require('fs');
   await page.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r; }))));
   const shot = async (t, file) => {
     await page.evaluate(t => window.render(t), t);
-    await page.screenshot({ path: file, type: mode === 'frames' ? 'jpeg' : 'png', quality: mode === 'frames' ? 95 : undefined });
+    const alpha = !!process.env.ALPHA;
+    const jpeg = mode === 'frames' && !alpha;
+    await page.screenshot({ path: file, type: jpeg ? 'jpeg' : 'png', quality: jpeg ? 95 : undefined, omitBackground: alpha });
   };
   if (mode === 'stills') {
     fs.mkdirSync(path.join(__dirname, 'stills' + (process.env.PAGE ? '-' + process.env.PAGE : '')), { recursive: true });
@@ -23,7 +26,7 @@ const fs = require('fs');
     fs.mkdirSync(dir, { recursive: true });
     const dur = await page.evaluate(() => window.DURATION);
     const n = Math.round(dur * 30);
-    for (let i = 0; i < n; i++) await shot(i / 30, path.join(dir, `f${String(i).padStart(4, '0')}.jpg`));
+    for (let i = 0; i < n; i++) await shot(i / 30, path.join(dir, `f${String(i).padStart(4, '0')}.${process.env.ALPHA ? 'png' : 'jpg'}`));
     console.log('frames', n);
   }
   await browser.close();

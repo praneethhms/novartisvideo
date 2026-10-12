@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  /* Transparent overlay for the customer feedback clip: lower third, then a compact name tag. */
+  :root { --ink: #161616; --orange: #FF4E00; --paper: #FCFCFC; --g1: #484848; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: transparent;
+    font-family: Arial, "Liberation Sans", sans-serif; color: var(--ink); }
+  #lt { position: absolute; left: 90px; bottom: 90px; display: flex; }
+  #lt .bar { width: 12px; background: var(--orange); transform-origin: bottom; }
+  #lt .panel { background: rgba(252, 252, 252, 0.95); padding: 30px 48px 32px 38px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18); }
+  #lt .e { font-size: 24px; font-weight: 700; color: var(--orange); letter-spacing: 1.5px; }
+  #lt .n { font-size: 60px; font-weight: 700; letter-spacing: -1px; margin-top: 10px; }
+  #lt .r { font-size: 30px; color: var(--g1); margin-top: 10px; }
+  #tag { position: absolute; left: 60px; bottom: 60px; display: flex; align-items: center; background: rgba(22, 22, 22, 0.88);
+    color: #fff; font-size: 28px; font-weight: 700; padding: 16px 26px 16px 20px; gap: 16px; }
+  #tag i { width: 8px; height: 34px; background: var(--orange); display: block; }
+  #tag span { font-weight: 400; color: #CFCFCF; }
+</style>
+</head>
+<body>
+<div id="lt">
+  <div class="bar" id="bar"></div>
+  <div class="panel" id="panel">
+    <div class="e" id="e">FEEDBACK FROM THE PILOT</div>
+    <div class="n" id="n">Gangannagari Reddy</div>
+    <div class="r" id="r">Field Associate, IMB &nbsp;·&nbsp; took part in the Driver Safety Programme pilot</div>
+  </div>
+</div>
+<div id="tag"><i></i>Gangannagari Reddy <span>· Field Associate, IMB</span></div>
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const prog = (t, t0, d) => cl((t - t0) / d);
+function appear(el, t, t0, d = 0.45, dx = -24) {
+  const p = ease(prog(t, t0, d));
+  el.style.opacity = p; el.style.transform = `translateX(${(1 - p) * dx}px)`;
+}
+const IN = 1.0, OUT = 8.4;   // full lower third on screen from IN until OUT
+window.DURATION = 50.6667;   // length of the feedback clip
+
+window.render = function (t) {
+  // full lower third: bar grows, panel wipes open, text staggers in; wipes closed at OUT
+  $('bar').style.transform = `scaleY(${inOut(prog(t, IN, 0.35)) * (1 - inOut(prog(t, OUT + 0.25, 0.3)))})`;
+  const open = inOut(prog(t, IN + 0.25, 0.5)) * (1 - inOut(prog(t, OUT, 0.4)));
+  $('panel').style.clipPath = `inset(0 ${100 - 100 * open}% 0 0)`;
+  appear($('e'), t, IN + 0.45); appear($('n'), t, IN + 0.6); appear($('r'), t, IN + 0.8);
+  $('lt').style.visibility = t < IN || t > OUT + 0.6 ? 'hidden' : 'visible';
+  // compact tag for the rest of the clip
+  const g = ease(prog(t, OUT + 0.5, 0.5));
+  $('tag').style.opacity = g;
+  $('tag').style.transform = `translateY(${(1 - g) * 16}px)`;
+};
+window.render(0);
+</script>
+</body>
+</html>
