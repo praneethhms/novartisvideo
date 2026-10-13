@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- Under-a-minute cut: purpose & scope (0-12.5) -> results (12.5-38.5) | outro card (38.5-41.5).
+     The feedback clip is spliced in between 38.5 and the outro by assemble-short.sh. -->
+<style>
+  :root { --ink: #161616; --orange: #FF4E00; --panel: #F2F2F2; --paper: #FCFCFC; --g1: #484848; --g2: #7A7A7A; --rule: #DADADA; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper);
+    font-family: Arial, "Liberation Sans", sans-serif; color: var(--ink); }
+  .scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  .abs { position: absolute; }
+  .num { font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+  .hd { position: absolute; left: 120px; top: 110px; font-size: 64px; font-weight: 700; letter-spacing: -1px; }
+  .hd span { color: var(--orange); }
+  .rule { position: absolute; left: 120px; top: 205px; height: 2px; background: var(--rule); width: 1680px; transform-origin: left; transform: scaleX(0); }
+  .sub { position: absolute; left: 120px; top: 228px; font-size: 28px; color: var(--g2); }
+  .eyebrow { font-size: 32px; font-weight: 700; color: var(--orange); letter-spacing: 1px; }
+  .band { position: absolute; left: 0; bottom: 0; width: 1920px; height: 150px; overflow: hidden; }
+  .band img.g { width: 1920px; height: 150px; object-fit: cover; display: block; }
+  .band img.logo { position: absolute; left: 120px; top: 52px; height: 46px; }
+  .card { position: absolute; background: var(--panel); border-left: 10px solid var(--orange); }
+  .card.ink { border-left-color: var(--g1); }
+  .call { position: absolute; display: flex; align-items: center; gap: 36px; }
+  .call .n { font-size: 136px; color: var(--orange); line-height: 1; }
+  .call .t { font-size: 42px; font-weight: 700; line-height: 1.25; }
+  .bigpanel { left: 120px; top: 300px; width: 520px; height: 640px; padding: 60px 48px; }
+  .bigpanel .n { font-size: 150px; color: var(--orange); line-height: 1; }
+  .bigpanel .lbl { font-size: 36px; color: var(--g1); margin-top: 26px; line-height: 1.3; }
+
+  /* I1 problem */
+  #i1 .eyebrow { left: 120px; top: 230px; }
+  #i1 .stmt { left: 112px; top: 290px; width: 1640px; font-size: 92px; font-weight: 700; letter-spacing: -2px; line-height: 1.12; }
+  #i1 .stmt span { color: var(--orange); }
+  /* I2 opportunity */
+  #i2 .blk { left: 120px; top: 300px; width: 1680px; height: 240px; background: var(--ink); color: #fff; padding: 0 70px;
+    display: flex; flex-direction: column; justify-content: center; font-size: 64px; font-weight: 700; letter-spacing: -1px; line-height: 1.15; }
+  #i2 .blk span { color: #9A9A9A; }
+  .step3 { top: 620px; width: 540px; height: 200px; padding: 40px 44px; }
+  .step3 .i { font-size: 30px; font-weight: 700; color: var(--orange); }
+  .step3 .k { font-size: 48px; font-weight: 700; margin-top: 18px; letter-spacing: -1px; }
+  /* I3 platform */
+  .chip { width: 820px; height: 170px; padding: 0 44px; display: flex; align-items: center; gap: 30px; font-size: 46px; font-weight: 700; }
+  .chip b { color: var(--orange); font-size: 54px; }
+
+  /* R1 hook */
+  #r1 { background: var(--ink); }
+  #r1 .big { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 280px; color: var(--orange); }
+  #r1 .l1 { position: absolute; left: 0; right: 0; top: 590px; text-align: center; font-size: 64px; font-weight: 700; color: #fff; }
+  #r1 .l2 { position: absolute; left: 0; right: 0; top: 690px; text-align: center; font-size: 46px; color: #A8A8A8; }
+  /* R2 glance */
+  .stat { top: 330px; width: 400px; height: 320px; padding: 44px 40px; }
+  .stat .n { font-size: 106px; color: var(--orange); line-height: 1; }
+  .stat.ink .n { color: var(--g1); }
+  .stat .lbl { font-size: 32px; color: var(--g2); margin-top: 36px; }
+  #r2 .foot { left: 120px; top: 760px; font-size: 40px; font-weight: 700; }
+  #r2 .foot span { color: var(--orange); }
+  /* R3 risk */
+  .bar { position: absolute; left: 720px; width: 1080px; }
+  .bar .top { display: flex; justify-content: space-between; font-size: 36px; font-weight: 700; }
+  .bar .top .v { color: var(--g1); font-weight: 400; }
+  .bar .track { margin-top: 16px; height: 26px; background: var(--rule); }
+  .bar .fill { height: 100%; width: 0; }
+  /* R4 phone */
+  .ph { top: 330px; width: 820px; height: 300px; padding: 50px 54px; }
+  .ph .n { font-size: 140px; line-height: 1; }
+  .ph .k { font-size: 40px; font-weight: 700; margin-top: 26px; }
+  #r4 .split { left: 120px; top: 720px; width: 1680px; height: 70px; display: flex; background: var(--rule); }
+  #r4 .split div { height: 100%; width: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 34px; font-weight: 700; overflow: hidden; white-space: nowrap; }
+  /* R5 scores */
+  .band5 { position: absolute; left: 720px; width: 1080px; }
+  .band5 .top { display: flex; justify-content: space-between; font-size: 38px; font-weight: 700; }
+  .band5 .top .v { font-weight: 400; color: var(--g1); }
+  .band5 .track { margin-top: 18px; height: 60px; background: var(--rule); }
+  .band5 .fill { height: 100%; width: 0; }
+  /* R6 spread */
+  #r6 .vb { position: absolute; bottom: 160px; width: 72px; height: 0; }
+  #r6 .vv { position: absolute; width: 72px; text-align: center; font-size: 24px; color: var(--g1); font-weight: 700; }
+  #r6 .base { left: 120px; top: 920px; width: 1680px; height: 2px; background: var(--g2); transform-origin: left; }
+  #r6 .call { left: 120px; top: 330px; }
+  #r6 .lg { left: 120px; top: 950px; font-size: 26px; color: var(--g2); }
+  /* R7 next steps */
+  .pr { top: 300px; width: 540px; height: 380px; background: var(--panel); }
+  .pr .h { height: 110px; background: var(--ink); color: var(--orange); font-size: 60px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .pr .k { font-size: 52px; font-weight: 700; margin: 50px 44px 0; line-height: 1.2; }
+  /* O outro */
+  #o .line { left: 0; right: 0; top: 330px; text-align: center; font-size: 120px; font-weight: 700; letter-spacing: -3px; }
+  #o .pw { left: 0; right: 0; top: 510px; text-align: center; font-size: 40px; color: var(--g2); }
+</style>
+</head>
+<body>
+
+<div class="scene" id="i1">
+  <div class="abs eyebrow" id="i1e">PURPOSE &amp; SCOPE &nbsp;|&nbsp; DRIVER SAFETY PROGRAMME</div>
+  <div class="abs stmt" id="i1s">Road travel is the <span>largest source of serious injury risk</span> for our field-based workforce.</div>
+  <div class="band" id="i1band"><img class="g" src="gradient.jpeg"><img class="logo" src="novartis.svg"></div>
+</div>
+
+<div class="scene" id="i2">
+  <div class="hd" id="i2h">From reactive to <span>preventive.</span></div>
+  <div class="rule" id="i2r"></div>
+  <div class="abs blk" id="i2b"><div><span>Today:</span> we learn of unsafe driving</div><div>only after an incident.</div></div>
+  <div class="card step3" id="q1" style="left:120px"><div class="i">01</div><div class="k">See the risk</div></div>
+  <div class="card step3" id="q2" style="left:690px"><div class="i">02</div><div class="k">Coach the right people</div></div>
+  <div class="card step3" id="q3" style="left:1260px"><div class="i">03</div><div class="k">Reduce incidents</div></div>
+</div>
+
+<div class="scene" id="i3">
+  <div class="hd" id="i3h">The platform: SafetyConnect.</div>
+  <div class="rule" id="i3r"></div>
+  <div class="sub" id="i3s">AI-powered driving safety · mobile app for Android &amp; iOS · web dashboard for HSE</div>
+  <div class="card chip" id="c1" style="left:120px;top:320px"><b>✓</b>Phone sensors only</div>
+  <div class="card chip" id="c2" style="left:980px;top:320px"><b>✓</b>No hardware or dashcam</div>
+  <div class="card chip" id="c3" style="left:120px;top:530px"><b>✓</b>Only business trips analysed</div>
+  <div class="card chip" id="c4" style="left:980px;top:530px"><b>✓</b>ISO 27001 certified vendor</div>
+</div>
+
+<div class="scene" id="r1">
+  <div class="big num" id="r1n">0</div>
+  <div class="l1" id="r1a">at-risk driving moments</div>
+  <div class="l2" id="r1b">Flagged before any incident.</div>
+</div>
+
+<div class="scene" id="r2">
+  <div class="hd" id="r2h">The pilot at a glance.</div>
+  <div class="rule" id="r2r"></div>
+  <div class="sub" id="r2s">10 April to 15 June 2026 &nbsp;|&nbsp; Divisions: NHPL, Oncology, IMB</div>
+  <div class="card stat" id="g1" style="left:120px"><div class="n num" id="g1n">0</div><div class="lbl">Field associates</div></div>
+  <div class="card stat" id="g2" style="left:546px"><div class="n num" id="g2n">0</div><div class="lbl">Days of monitoring</div></div>
+  <div class="card stat ink" id="g3" style="left:972px"><div class="n num" id="g3n">0</div><div class="lbl">Kilometres covered</div></div>
+  <div class="card stat ink" id="g4" style="left:1398px"><div class="n num" id="g4n">0</div><div class="lbl">Trips</div></div>
+  <div class="abs foot" id="r2f">Every trip captured automatically. <span>No manual logging.</span></div>
+</div>
+
+<div class="scene" id="r3">
+  <div class="hd" id="r3h">Where the risk sits.</div>
+  <div class="rule" id="r3r"></div>
+  <div class="card bigpanel" id="r3p"><div class="n num" id="r3n">0</div><div class="lbl">at-risk behaviour events</div></div>
+  <div class="bar" id="b1" style="top:310px"><div class="top"><span>Harsh Braking</span><span class="v">4,142 · 53.7%</span></div><div class="track"><div class="fill" style="background:var(--orange)"></div></div></div>
+  <div class="bar" id="b2" style="top:430px"><div class="top"><span>Phone Usage</span><span class="v">1,738 · 22.5%</span></div><div class="track"><div class="fill" style="background:var(--ink)"></div></div></div>
+  <div class="bar" id="b3" style="top:550px"><div class="top"><span>Overspeeding</span><span class="v">1,243 · 16.1%</span></div><div class="track"><div class="fill" style="background:var(--g2)"></div></div></div>
+  <div class="bar" id="b4" style="top:670px"><div class="top"><span>Harsh Accel. / Cornering</span><span class="v">593 · 7.6%</span></div><div class="track"><div class="fill" style="background:#B5B5B5"></div></div></div>
+  <div class="call" id="r3c" style="left:720px;top:800px"><div class="n num">76%</div><div class="t">of all risk sits in just<br>two behaviours.</div></div>
+</div>
+
+<div class="scene" id="r4">
+  <div class="hd" id="r4h">Phone use: mostly screens, <span>not calls.</span></div>
+  <div class="rule" id="r4r"></div>
+  <div class="card ph ink" id="p1" style="left:120px"><div class="n num" style="color:var(--g1)" id="p1n">0</div><div class="k">calls while driving</div></div>
+  <div class="card ph" id="p2" style="left:980px"><div class="n num" style="color:var(--orange)" id="p2n">0</div><div class="k">screen interactions while moving</div></div>
+  <div class="abs split" id="r4s"><div style="background:var(--g1)">38%</div><div style="background:var(--orange)">62%</div></div>
+</div>
+
+<div class="scene" id="r5">
+  <div class="hd" id="r5h">19 of 20 drivers score Good.</div>
+  <div class="rule" id="r5r"></div>
+  <div class="card bigpanel" id="r5p"><div class="n num" id="r5n">0</div><div class="lbl">average safety score<br>out of 100</div></div>
+  <div class="band5" id="d1" style="top:360px"><div class="top"><span>Good &nbsp;≥70</span><span class="v">19 drivers (95%)</span></div><div class="track"><div class="fill" style="background:var(--orange)"></div></div></div>
+  <div class="band5" id="d2" style="top:580px"><div class="top"><span>Medium &nbsp;30–69</span><span class="v">1 driver (5%)</span></div><div class="track"><div class="fill" style="background:var(--g1)"></div></div></div>
+</div>
+
+<div class="scene" id="r6">
+  <div class="hd" id="r6h">Risk rate by field associate.</div>
+  <div class="rule" id="r6r"></div>
+  <div class="sub" id="r6s">At-risk events per 100 km &nbsp;|&nbsp; field associates with min. 50 km driven</div>
+  <div id="r6bars"></div>
+  <div class="abs base" id="r6b"></div>
+  <div class="call" id="r6c"><div class="n num">15×</div><div class="t">gap between the safest<br>and the riskiest driver.</div></div>
+  <div class="abs lg" id="r6l">Each bar is one field associate. Individuals are not identified.</div>
+</div>
+
+<div class="scene" id="r7">
+  <div class="hd" id="r7h">Three priorities for the next phase.</div>
+  <div class="rule" id="r7r"></div>
+  <div class="abs pr" id="x1" style="left:120px"><div class="h">01</div><div class="k">Coach where the AI points</div></div>
+  <div class="abs pr" id="x2" style="left:690px"><div class="h">02</div><div class="k">Set a division-level target</div></div>
+  <div class="abs pr" id="x3" style="left:1260px"><div class="h">03</div><div class="k">Scale to the full field force</div></div>
+</div>
+
+<div class="scene" id="o">
+  <div class="abs line" id="ol">From pilot to programme.</div>
+  <div class="abs pw" id="op">Powered by the SafetyConnect app</div>
+  <div class="band" id="oband"><img class="g" src="gradient.jpeg"><img class="logo" src="novartis.svg"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const prog = (t, t0, d) => cl((t - t0) / d);
+const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
+function appear(el, t, t0, d = 0.45, dy = 28) {
+  const p = ease(prog(t, t0, d)); el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * dy}px)`;
+}
+const count = (el, t, t0, d, to, dec = 0) => el.textContent = fmt(to * ease(prog(t, t0, d)), dec);
+function scene(el, t, a, b, out = 0.3) {
+  if (t < a || t >= b) { el.style.opacity = 0; el.style.visibility = 'hidden'; return false; }
+  el.style.visibility = 'visible';
+  const o = cl((b - t) / out); el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * -14}px)`;
+  return true;
+}
+function header(t, a, id) {
+  appear($(id + 'h'), t, a + 0.05, 0.4);
+  $(id + 'r').style.transform = `scaleX(${inOut(prog(t, a + 0.1, 0.6))})`;
+  const s = $(id + 's'); if (s) appear(s, t, a + 0.2, 0.4);
+}
+const wipe = (el, t, t0, d) => el.style.clipPath = `inset(0 ${100 - 100 * inOut(prog(t, t0, d))}% 0 0)`;
+
+const RATES = [10.1, 13.1, 15.1, 21.4, 22.4, 32.4, 34.1, 43.3, 58.8, 72.0, 87.1, 87.4, 88.7, 97.6, 107.2, 152.4];
+RATES.forEach((r, i) => {
+  const x = 120 + i * 104;
+  $('r6bars').insertAdjacentHTML('beforeend',
+    `<div class="vb" id="vb${i}" style="left:${x}px;background:${i === 15 ? 'var(--g1)' : 'var(--orange)'}"></div>` +
+    `<div class="vv" id="vv${i}" style="left:${x}px">${r.toFixed(1)}</div>`);
+});
+
+// scene boundaries; OUTRO starts at 38.5 and is rendered after the feedback clip
+const T = { i1: 0, i2: 4.5, i3: 8.5, r1: 12.5, r2: 15.5, r3: 19, r4: 23.5, r5: 27, r6: 30.5, r7: 34.5, o: 38.5, end: 41.5 };
+window.DURATION = T.end;
+
+window.render = function (t) {
+  if (scene($('i1'), t, T.i1, T.i2)) {
+    wipe($('i1band'), t, 0.05, 0.8); appear($('i1e'), t, 0.1); appear($('i1s'), t, 0.25, 0.6, 36);
+  }
+  if (scene($('i2'), t, T.i2, T.i3)) {
+    const a = T.i2; header(t, a, 'i2'); appear($('i2b'), t, a + 0.3, 0.45, 24);
+    ['q1', 'q2', 'q3'].forEach((id, i) => appear($(id), t, a + 1.1 + i * 0.3, 0.4, 24));
+  }
+  if (scene($('i3'), t, T.i3, T.r1, 0.01)) {
+    const a = T.i3; header(t, a, 'i3');
+    ['c1', 'c2', 'c3', 'c4'].forEach((id, i) => appear($(id), t, a + 0.4 + i * 0.25, 0.4, 20));
+  }
+  if (scene($('r1'), t, T.r1, T.r2, 0.01)) {
+    const a = T.r1;
+    $('r1').style.opacity = 1;
+    $('r1').style.transform = `translateY(${-1080 * inOut(prog(t, T.r2 - 0.4, 0.4))}px)`;
+    appear($('r1n'), t, a + 0.05, 0.3, 0); count($('r1n'), t, a + 0.05, 1.0, 7716);
+    $('r1n').style.transform = `scale(${0.94 + 0.06 * ease(prog(t, a + 0.05, 1.2))})`;
+    appear($('r1a'), t, a + 0.75, 0.4); appear($('r1b'), t, a + 1.1, 0.4);
+  }
+  if (scene($('r2'), t, T.r2, T.r3)) {
+    const a = T.r2; header(t, a, 'r2');
+    [20, 66, 11843, 1359].forEach((v, i) => {
+      appear($('g' + (i + 1)), t, a + 0.3 + i * 0.1, 0.4, 24); count($('g' + (i + 1) + 'n'), t, a + 0.35 + i * 0.1, 0.9, v);
+    });
+    appear($('r2f'), t, a + 1.2, 0.4);
+  }
+  if (scene($('r3'), t, T.r3, T.r4)) {
+    const a = T.r3; header(t, a, 'r3');
+    appear($('r3p'), t, a + 0.2, 0.4, 24); count($('r3n'), t, a + 0.25, 0.9, 7716);
+    const dim = ease(prog(t, a + 1.6, 0.4));
+    [53.7, 22.5, 16.1, 7.6].forEach((w, i) => {
+      const el = $('b' + (i + 1));
+      appear(el, t, a + 0.3 + i * 0.1, 0.4, 20);
+      el.querySelector('.fill').style.width = (w * ease(prog(t, a + 0.4 + i * 0.12, 0.8))) + '%';
+      if (i >= 2) el.style.opacity = Math.min(+el.style.opacity, 1 - 0.65 * dim);
+    });
+    appear($('r3c'), t, a + 1.7, 0.4, 24);
+  }
+  if (scene($('r4'), t, T.r4, T.r5)) {
+    const a = T.r4; header(t, a, 'r4');
+    appear($('p1'), t, a + 0.25, 0.4, 24); count($('p1n'), t, a + 0.3, 0.8, 662);
+    appear($('p2'), t, a + 0.4, 0.4, 24); count($('p2n'), t, a + 0.45, 0.8, 1076);
+    appear($('r4s'), t, a + 0.8, 0.3, 0);
+    const [x1, x2] = $('r4s').children;
+    x1.style.width = (38 * inOut(prog(t, a + 0.85, 0.5))) + '%';
+    x2.style.width = (62 * inOut(prog(t, a + 1.2, 0.6))) + '%';
+  }
+  if (scene($('r5'), t, T.r5, T.r6)) {
+    const a = T.r5; header(t, a, 'r5');
+    appear($('r5p'), t, a + 0.2, 0.4, 24); count($('r5n'), t, a + 0.25, 0.9, 86.3, 1);
+    [95, 5].forEach((w, i) => {
+      const el = $('d' + (i + 1)); appear(el, t, a + 0.3 + i * 0.12, 0.4, 20);
+      el.querySelector('.fill').style.width = (w * ease(prog(t, a + 0.45 + i * 0.12, 0.9))) + '%';
+    });
+  }
+  if (scene($('r6'), t, T.r6, T.r7)) {
+    const a = T.r6; header(t, a, 'r6');
+    $('r6b').style.transform = `scaleX(${inOut(prog(t, a + 0.2, 0.5))})`;
+    RATES.forEach((r, i) => {
+      const h = (r / 152.4) * 520 * ease(prog(t, a + 0.3 + i * 0.06, 0.6));
+      $('vb' + i).style.height = h + 'px';
+      const v = $('vv' + i); v.style.top = (920 - h - 36) + 'px'; v.style.opacity = prog(t, a + 0.6 + i * 0.06, 0.25);
+    });
+    appear($('r6c'), t, a + 1.6, 0.4, 24); appear($('r6l'), t, a + 1.9, 0.4, 10);
+  }
+  if (scene($('r7'), t, T.r7, T.o, 0.4)) {
+    const a = T.r7; header(t, a, 'r7');
+    ['x1', 'x2', 'x3'].forEach((id, i) => appear($(id), t, a + 0.3 + i * 0.35, 0.45, 26));
+  }
+  if (scene($('o'), t, T.o, T.end + 1, 0.01)) {
+    const a = T.o; $('o').style.transform = 'none';
+    appear($('ol'), t, a + 0.15, 0.5, 30); appear($('op'), t, a + 0.5, 0.4, 20); wipe($('oband'), t, a + 0.1, 0.8);
+  }
+};
+window.render(0);
+</script>
+</body>
+</html>
