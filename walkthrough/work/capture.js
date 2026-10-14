@@ -1,0 +1,34 @@
+// Usage: [PAGE=intro] node capture.js stills t1,t2,...   |   [PAGE=intro] node capture.js frames
+// W/H set the viewport (default 1920x1080; the walkthrough is W=1080 H=1920).
+// ALPHA=1 writes transparent PNG frames (for overlays).
+// PAGE picks <PAGE>.html (default: video); output goes to stills/ or frames/, suffixed with -<PAGE> when set.
+const { chromium } = require('playwright');
+const path = require('path');
+const fs = require('fs');
+
+(async () => {
+  const mode = process.argv[2];
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: +(process.env.W || 1920), height: +(process.env.H || 1080) }, deviceScaleFactor: 1 });
+  await page.goto('file://' + path.join(__dirname, (process.env.PAGE || 'video') + '.html'));
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r; }))));
+  const shot = async (t, file) => {
+    await page.evaluate(t => window.render(t), t);
+    const alpha = !!process.env.ALPHA;
+    const jpeg = mode === 'frames' && !alpha;
+    await page.screenshot({ path: file, type: jpeg ? 'jpeg' : 'png', quality: jpeg ? 95 : undefined, omitBackground: alpha });
+  };
+  if (mode === 'stills') {
+    fs.mkdirSync(path.join(__dirname, 'stills' + (process.env.PAGE ? '-' + process.env.PAGE : '')), { recursive: true });
+    for (const t of process.argv[3].split(',').map(Number)) await shot(t, path.join(__dirname, 'stills' + (process.env.PAGE ? '-' + process.env.PAGE : ''), `t${t.toFixed(2)}.png`));
+  } else {
+    const dir = path.join(__dirname, 'frames' + (process.env.PAGE ? '-' + process.env.PAGE : ''));
+    fs.mkdirSync(dir, { recursive: true });
+    const dur = await page.evaluate(() => window.DURATION);
+    const n = Math.round(dur * 30);
+    for (let i = 0; i < n; i++) await shot(i / 30, path.join(dir, `f${String(i).padStart(4, '0')}.${process.env.ALPHA ? 'png' : 'jpg'}`));
+    console.log('frames', n);
+  }
+  await browser.close();
+})();
