@@ -10,6 +10,7 @@
     background: linear-gradient(180deg, var(--navy) 0%, var(--navy2) 100%); }
   .abs { position: absolute; }
   #brand { left: 60px; top: 62px; font-size: 30px; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 18px; }
+  #brand img { height: 46px; display: block; }
   #brand span { font-weight: 400; color: var(--soft); font-size: 26px; padding: 6px 16px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 30px; }
   #step { left: 60px; top: 150px; font-size: 28px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
   #title { left: 60px; top: 192px; width: 960px; font-size: 64px; font-weight: 800; letter-spacing: -1px; }
@@ -22,19 +23,20 @@
   #prog i { display: block; height: 100%; width: 0; background: var(--accent); }
   #outro { inset: 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy2) 100%); opacity: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-  #outro .k { font-size: 112px; font-weight: 800; letter-spacing: -2px; }
-  #outro .d { font-size: 54px; color: var(--accent); margin-top: 26px; font-weight: 700; }
+  #outro .k { background: #fff; border-radius: 32px; padding: 64px 70px; box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
+  #outro .k img { width: 760px; display: block; }
+  #outro .d { font-size: 58px; color: var(--accent); margin-top: 70px; font-weight: 700; }
   #outro .s { font-size: 32px; color: var(--soft); margin-top: 60px; }
 </style>
 </head>
 <body>
-<div class="abs" id="brand">SafetyConnect <span>App walkthrough</span></div>
+<div class="abs" id="brand"><img src="logo-white.png" alt="SafetyConnect"><span>App walkthrough</span></div>
 <div class="abs" id="step"></div>
 <div class="abs" id="title"></div>
 <div class="abs" id="cap"></div>
 <div class="abs" id="phone"><img id="scr" src="phone/p0000.jpg"></div>
 <div class="abs" id="prog"></div>
-<div class="abs" id="outro"><div class="k">SafetyConnect</div><div class="d">Every journey matters.</div><div class="s">AI-powered driving safety on your phone</div></div>
+<div class="abs" id="outro"><div class="k"><img src="logo-color.png" alt="SafetyConnect"></div><div class="d">Every journey matters.</div><div class="s">AI-powered driving safety on your phone</div></div>
 <script>
 const STEPS = __STEPS__;
 const FPS = 30;
