@@ -6,19 +6,19 @@ import json, subprocess, wave
 FPS, TOTAL, GAP, LEAD = 30, 60.0, 0.85, 0.3
 A, B = 'src/recA_blur.mp4', 'src/recB.mp4'  # recA_blur: contact blurred by blur_sos.py
 
-# (source, in, out) pieces per step, in seconds of the original recordings
+# (source, in, out) pieces per step, in seconds of the original recordings (true PTS; recB is VFR)
 PIECES = {
     'intro':   [(A, 0.0, 1.4)],
-    'home':    [(B, 0.0, 3.6)],
-    'modes':   [(B, 4.0, 8.2), (B, 26.0, 33.6)],
-    'scores':  [(B, 36.0, 51.0)],
-    'improve': [(B, 51.0, 60.0)],
-    'trips':   [(B, 69.0, 77.0)],
-    'trip':    [(B, 78.0, 95.0)],
-    'reports': [(B, 95.5, 100.0), (B, 105.5, 110.5)],
+    'home':    [(B, 0.0, 4.4)],
+    'modes':   [(B, 5.0, 9.0), (B, 27.0, 32.9)],      # vehicle picker; business mode off -> personal
+    'scores':  [(B, 38.0, 53.0)],                     # score info tooltips
+    'improve': [(B, 53.0, 63.0)],                     # improvement suggestion, news feed
+    'trips':   [(B, 72.0, 78.0)],                     # trip list once loaded
+    'trip':    [(B, 80.0, 95.0)],                     # trip detail, map with events
+    'reports': [(B, 97.0, 101.6), (B, 106.0, 110.6)], # weekly, monthly
     'sos':     [(A, 1.3, 7.6)],
-    'more':    [(B, 119.6, 122.4), (B, 125.0, 128.5)],
-    'outro':   [(B, 33.6, 35.0)],
+    'more':    [(B, 119.6, 122.6), (B, 127.2, 128.4)],# documents, languages (stops short of the profile screen)
+    'outro':   [(B, 35.0, 36.6)],
 }
 
 script = json.load(open('script.json'))
