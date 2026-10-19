@@ -1,4 +1,5 @@
 // Usage: [PAGE=intro] node capture.js stills t1,t2,...   |   [PAGE=intro] node capture.js frames
+// FROM/TO limit frames mode to a frame range (re-render part of a video).
 // W/H set the viewport (default 1920x1080; the walkthrough is W=1080 H=1920).
 // ALPHA=1 writes transparent PNG frames (for overlays).
 // PAGE picks <PAGE>.html (default: video); output goes to stills/ or frames/, suffixed with -<PAGE> when set.
@@ -27,7 +28,8 @@ const fs = require('fs');
     fs.mkdirSync(dir, { recursive: true });
     const dur = await page.evaluate(() => window.DURATION);
     const n = Math.round(dur * 30);
-    for (let i = 0; i < n; i++) await shot(i / 30, path.join(dir, `f${String(i).padStart(4, '0')}.${process.env.ALPHA ? 'png' : 'jpg'}`));
+    const from = +(process.env.FROM || 0), to = Math.min(n, +(process.env.TO || n));  // optional frame range
+    for (let i = from; i < to; i++) await shot(i / 30, path.join(dir, `f${String(i).padStart(4, '0')}.${process.env.ALPHA ? 'png' : 'jpg'}`));
     console.log('frames', n);
   }
   await browser.close();
