@@ -4,22 +4,24 @@
 import json, subprocess, wave
 
 FPS, TOTAL, GAP, LEAD = 30, 60.0, 0.85, 0.3
-A, B = 'src/recA_blur.mp4', 'src/recB.mp4'  # recA_blur: contact blurred by blur_sos.py
+A, B, C = 'src/recA_blur.mp4', 'src/recB.mp4', 'src/recC.mp4'  # recA_blur: contact blurred by blur_sos.py; recC: working hours
 
 # (source, in, out) pieces per step, in seconds of the original recordings (true PTS; recB is VFR)
 PIECES = {
-    'intro':   [(A, 0.0, 1.4)],
-    'home':    [(B, 0.0, 4.4)],
-    'modes':   [(B, 5.0, 9.0), (B, 27.0, 32.9)],      # vehicle picker; business mode off -> personal
-    'scores':  [(B, 38.0, 53.0)],                     # score info tooltips
-    'improve': [(B, 53.0, 63.0)],                     # improvement suggestion, news feed
-    'trips':   [(B, 72.0, 78.0)],                     # trip list once loaded
-    'trip':    [(B, 80.0, 95.0)],                     # trip detail, map with events
-    'reports': [(B, 97.0, 101.6), (B, 106.0, 110.6)], # weekly, monthly
-    'sos':     [(A, 1.3, 7.6)],
-    'more':    [(B, 119.6, 122.6), (B, 127.2, 128.4)],# documents, languages (stops short of the profile screen)
-    'outro':   [(B, 35.0, 36.6)],
+    'intro':     [(A, 0.0, 1.4)],
+    'home':      [(B, 0.0, 4.4)],
+    'passenger': [(B, 5.0, 9.0), (B, 21.0, 25.9)],     # vehicle menu with Passenger Mode; passenger timer
+    'hours':     [(C, 2.4, 13.4), (B, 27.0, 32.9)],    # working hours (recC 0-2s is the profile screen); personal mode
+    'scores':    [(B, 45.0, 50.5)],                    # smoothness tooltip
+    'improve':   [(B, 53.0, 60.0)],                    # improvement suggestion, news feed
+    'trips':     [(B, 72.0, 78.0)],                    # trip list once loaded
+    'trip':      [(B, 80.0, 82.5), (B, 88.0, 93.0)],   # trip summary, map with events
+    'reports':   [(B, 97.0, 100.0), (B, 106.0, 108.5)],# weekly, monthly
+    'sos':       [(A, 1.3, 7.6)],
+    'more':      [(B, 119.6, 122.6), (B, 127.2, 128.4)],# documents, languages (stops short of the profile screen)
+    'outro':     [(B, 35.0, 36.6)],
 }
+
 
 script = json.load(open('script.json'))
 def wav_len(p):
@@ -47,7 +49,7 @@ for s in steps:
         acc += o - i
         want = round(acc / src_len * seg_frames) - round((acc - (o - i)) / src_len * seg_frames)
         lab = f'p{n}'; n += 1
-        src_lab = 'A' if src == A else '1:v'
+        src_lab = {A: 'A', B: '1:v', C: '2:v'}[src]
         parts.append(f"[{'s' + lab}]trim={i}:{o},setpts=(PTS-STARTPTS)/{speed:.5f},fps={FPS},"
                      f"scale=996:2160:flags=lanczos,setsar=1,tpad=stop_mode=clone:stop_duration=2,trim=end_frame={want},setpts=PTS-STARTPTS[{lab}]")
         labels.append((src_lab, lab))
@@ -55,12 +57,12 @@ for s in steps:
 
 # fan out each source to as many trims as it feeds
 fan = []
-for src_lab in ('A', '1:v'):
+for src_lab in ('A', '1:v', '2:v'):
     labs = [lab for s_, lab in labels if s_ == src_lab]
     fan.append(f"[{src_lab}]split={len(labs)}" + ''.join(f'[s{l}]' for l in labs))
 graph = ';'.join([parts[0]] + fan + parts[1:] + [''.join(f'[{l}]' for _, l in labels) + f'concat=n={len(labels)}:v=1:a=0[v]'])
 
-subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', A, '-i', B,
+subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', A, '-i', B, '-i', C,
                 '-filter_complex', graph, '-map', '[v]', '-an', '-c:v', 'libx264', '-crf', '14', '-preset', 'fast',
                 '-pix_fmt', 'yuv420p', 'phone.mp4'], check=True)
 json.dump(steps, open('timeline.json', 'w'), indent=1)

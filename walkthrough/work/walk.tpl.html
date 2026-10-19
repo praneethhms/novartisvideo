@@ -21,12 +21,11 @@
   #prog { left: 60px; top: 1878px; width: 960px; height: 8px; display: flex; gap: 10px; }
   #prog div { flex: 1; background: var(--track); border-radius: 4px; overflow: hidden; }
   #prog i { display: block; height: 100%; width: 0; background: var(--accent); }
-  #outro { inset: 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy2) 100%); opacity: 0;
+  #outro { inset: 0; background: #FFFFFF; opacity: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-  #outro .k { background: #fff; border-radius: 32px; padding: 64px 70px; box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
-  #outro .k img { width: 760px; display: block; }
-  #outro .d { font-size: 58px; color: var(--accent); margin-top: 70px; font-weight: 700; }
-  #outro .s { font-size: 32px; color: var(--soft); margin-top: 60px; }
+    #outro .k img { width: 900px; display: block; }
+  #outro .d { font-size: 56px; color: #1F4E8C; margin-top: 90px; font-weight: 700; }
+  #outro .s { font-size: 32px; color: #5B6B80; margin-top: 30px; }
 </style>
 </head>
 <body>
@@ -60,6 +59,7 @@ window.render = async function (t) {
   $('step').textContent = s.id === 'intro' ? 'ONE-MINUTE TOUR' : s.id === 'outro' ? '' : `${String(ci + 1).padStart(2, '0')} / ${String(CHAPTERS.length).padStart(2, '0')}`;
   $('title').textContent = s.id === 'intro' ? 'Meet the SafetyConnect app' : s.title;
   $('cap').textContent = s.caption;
+  $('cap').style.fontSize = s.caption.length > 120 ? '33px' : '38px';  // long captions stay clear of the phone
   show($('step'), t, s.start + 0.02, s.end);
   show($('title'), t, s.start + 0.05, s.end);
   show($('cap'), t, s.vo_start - 0.05, s.end, 12);
